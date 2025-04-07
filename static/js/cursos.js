@@ -9,7 +9,7 @@ function verificarAutenticacao() {
   }
 }
 
-// Adicione no topo do arquivo
+// Verificação imediata de autenticação
 (function checkAuth() {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -133,10 +133,14 @@ function preencherTabela(cursos) {
             <td>${curso.carga_horaria || "N/A"}h</td>
             <td>${formatarMoeda(curso.valor)}</td>
             <td class="btn-container">
-                <button class="edit-btn" data-id="${curso.idcurso}">
+                <button class="btn btn-sm btn-outline-primary edit-btn" data-id="${
+                  curso.idcurso
+                }">
                     <i class="fas fa-edit"></i> Editar
                 </button>
-                <button class="delete-btn" data-id="${curso.idcurso}">
+                <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${
+                  curso.idcurso
+                }">
                     <i class="fas fa-trash-alt"></i> Excluir
                 </button>
             </td>`;
@@ -293,11 +297,11 @@ async function handleDeleteClick(event) {
 }
 
 // ====================== CRIAÇÃO DE CURSO ======================
-$("#saveCreate").click(async () => {
+$(document).on("click", "#saveCreate", async function () {
   const newCurso = {
     nome: $("#createNome").val().trim(),
     descricao: $("#createDescricao").val().trim(),
-    carga_horaria: $("#createCargaHoraria").val(),
+    carga_horaria: parseInt($("#createCargaHoraria").val()),
     valor: parseFloat($("#createValor").val()),
   };
 

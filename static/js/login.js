@@ -27,19 +27,19 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function mostrarCadastro() {
-  const loginContainer = document.getElementById("login-container");
-  const cadastroContainer = document.getElementById("cadastro-container");
+  const loginForm = document.getElementById("login-form");
+  const cadastroForm = document.getElementById("cadastro-form");
 
-  if (loginContainer) loginContainer.style.display = "none";
-  if (cadastroContainer) cadastroContainer.style.display = "block";
+  if (loginForm) loginForm.style.display = "none";
+  if (cadastroForm) cadastroForm.style.display = "block";
 }
 
 function mostrarLogin() {
-  const loginContainer = document.getElementById("login-container");
-  const cadastroContainer = document.getElementById("cadastro-container");
+  const loginForm = document.getElementById("login-form");
+  const cadastroForm = document.getElementById("cadastro-form");
 
-  if (loginContainer) loginContainer.style.display = "block";
-  if (cadastroContainer) cadastroContainer.style.display = "none";
+  if (loginForm) loginForm.style.display = "block";
+  if (cadastroForm) cadastroForm.style.display = "none";
 }
 
 async function fazerLogin() {
