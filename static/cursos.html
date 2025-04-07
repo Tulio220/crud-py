@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciamento de Cursos</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+    />
+    <link rel="stylesheet" href="/static/css/styles.css" />
+  </head>
+  <body>
+    <!-- Cabeçalho -->
+    <div class="header-panel">
+      <div class="overlay"></div>
+      <button class="btn btn-modern theme-toggle-btn" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+      <div class="header-content">
+        <div class="header-icon fas fa-graduation-cap"></div>
+        <div class="header-text">
+          <h1>Sistema de Gerenciamento de Cursos</h1>
+          <p>Gerencie seus cursos de forma simples e eficiente</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-4 mb-5">
+      <!-- Barra de pesquisa e botão de novo curso -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="search-container">
+          <div class="input-group">
+            <span class="input-group-text bg-transparent border-end-0">
+              <i class="fas fa-search"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control border-start-0"
+              id="searchInput"
+              placeholder="Pesquisar cursos..."
+            />
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-modern"
+          data-bs-toggle="modal"
+          data-bs-target="#createModal"
+        >
+          <i class="fas fa-plus"></i> Novo Curso
+        </button>
+      </div>
+
+      <!-- Tabela de cursos -->
+      <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="table">
+          <table id="userTable" class="table table-hover">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Carga Horária</th>
+                <th>Valor</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="lista">
+              <!-- Dados serão inseridos aqui -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Criação -->
+    <div
+      class="modal fade"
+      id="createModal"
+      tabindex="-1"
+      aria-labelledby="createModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-3">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createModalLabel">
+              <i class="fas fa-plus-circle me-2"></i>Novo Curso
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="createForm">
+              <div class="mb-3">
+                <label for="createNome" class="form-label">Nome *</label>
+                <input
+                  type="text"
+                  class="form-control rounded-pill"
+                  id="createNome"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="createDescricao" class="form-label"
+                  >Descrição *</label
+                >
+                <textarea
+                  class="form-control rounded-3"
+                  id="createDescricao"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="createCargaHoraria" class="form-label"
+                  >Carga Horária *</label
+                >
+                <input
+                  type="number"
+                  class="form-control rounded-pill"
+                  id="createCargaHoraria"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="createValor" class="form-label">Valor *</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control rounded-pill"
+                  id="createValor"
+                  required
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-secondary rounded-pill"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-modern" id="saveCreate">
+              Salvar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div
+      class="modal fade"
+      id="editModal"
+      tabindex="-1"
+      aria-labelledby="editModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-3">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editModalLabel">
+              <i class="fas fa-edit me-2"></i>Editar Curso
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="editForm">
+              <input type="hidden" id="editId" />
+              <div class="mb-3">
+                <label for="editNome" class="form-label">Nome *</label>
+                <input
+                  type="text"
+                  class="form-control rounded-pill"
+                  id="editNome"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="editDescricao" class="form-label"
+                  >Descrição *</label
+                >
+                <textarea
+                  class="form-control rounded-3"
+                  id="editDescricao"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="editCargaHoraria" class="form-label"
+                  >Carga Horária *</label
+                >
+                <input
+                  type="number"
+                  class="form-control rounded-pill"
+                  id="editCargaHoraria"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="editValor" class="form-label">Valor *</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control rounded-pill"
+                  id="editValor"
+                  required
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-secondary rounded-pill"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-modern" id="saveEdit">
+              Salvar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Exclusão -->
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-3">
+          <div class="modal-header">
+            <h5 class="modal-title text-danger" id="deleteModalLabel">
+              <i class="fas fa-trash-alt me-2"></i>Confirmar Exclusão
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center mb-3">
+              <i
+                class="fas fa-exclamation-triangle text-warning fa-3x mb-3"
+              ></i>
+              <p>
+                Tem certeza que deseja excluir este curso? Esta ação não pode
+                ser desfeita.
+              </p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-secondary rounded-pill"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="button" class="delete-btn" id="confirmDelete">
+              Excluir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Container de Notificações -->
+    <div id="notification-container"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="/static/js/cursos.js"></script>
+  </body>
+</html>
